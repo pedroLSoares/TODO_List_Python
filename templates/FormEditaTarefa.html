@@ -1,0 +1,71 @@
+
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+    <div id="tarefasHoje">
+        <h2>{{ diaSemana }}</h2>
+    <ul class="list-group" id="lista">
+            {% for tarefa in tarefas %}
+
+                <li class="list-group-item d-flex justify-content-between" ><p>{{ tarefa.tarefa }}</p>
+                    <span>
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#tarefa_{{ tarefa.id }}" data-whatever="@mdo">Alterar</button>
+                        <a href="{% url 'excluiTarefa' diaSemana tarefa.id  %}" class="btn btn-danger btn-sm" onclick="return confirm('Deseja mesmo acessar o Google?');">Excluir</a>
+                    </span>
+                </li>
+
+
+                <div class="modal fade" id="tarefa_{{ tarefa.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <form action="{% url 'atualizaTarefaCompleta' diaSemana tarefa.id %}" method="post">
+                    {% csrf_token %}
+                                  <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Tarefa</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+
+                                          <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Tarefa:</label>
+                                            <input type="text" class="form-control" id="recipient-name" value="{{ tarefa.tarefa }}" name="tarefa">
+                                          </div>
+                                          <div class="form-group">
+                                            <label for="diaSemana" class="col-form-label">Mensagem:</label>
+                                            <select class="form-control" id="diaSemana" name="dia_da_semana">
+                                                    <option value="Segunda-feira" {% if tarefa.dia_da_semana == 'Segunda - feira' %} selected {% endif %}>Segunda-feira</option>
+                                                    <option value="Terça-feira"{% if tarefa.dia_da_semana == 'Terça-feira' %} selected {% endif %}>Terça-feira</option>
+                                                    <option value="Quarta-feira"{% if tarefa.dia_da_semana == 'Quarta-feira' %} selected {% endif %}>Quarta-feira</option>
+                                                    <option value="Quinta-feira"{% if tarefa.dia_da_semana == 'Quinta-feira' %} selected {% endif %}>Quinta-feira</option>
+                                                    <option value="Sexta-feira"{% if tarefa.dia_da_semana == 'Sexta-feira' %} selected {% endif %}>Sexta-feira</option>
+                                                    <option value="Sábado"{% if tarefa.dia_da_semana == 'Sábado' %} selected {% endif %}>Sábado</option>
+                                                    <option value="Domingo"{% if tarefa.dia_da_semana == 'Domingo' %} selected {% endif %}>Domingo</option>
+                                                </select>
+                                          </div>
+
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                        <input type="submit" class="btn btn-primary" value="Enviar">
+                                      </div>
+                                    </div>
+                                  </div>
+                                    </form>
+                                </div>
+
+            {% endfor %}
+    </ul>
+    </div>
+
+
+
+
+
+{% endblock %}
